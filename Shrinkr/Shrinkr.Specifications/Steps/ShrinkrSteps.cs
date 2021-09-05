@@ -105,5 +105,11 @@ namespace Shrinkr.Specifications.Steps
         {
             this.httpResponse.RequestMessage.RequestUri.ToString().ShouldBe(longUrl);
         }
+
+        [Then(@"I will receive a bad request response")]
+        public void ThenIWillReceiveABadRequestResponse()
+        {
+            this.httpResponse.StatusCode.ShouldBe(System.Net.HttpStatusCode.BadRequest);
+        }
     }
 }

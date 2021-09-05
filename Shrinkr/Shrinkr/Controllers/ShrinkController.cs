@@ -22,10 +22,17 @@ namespace Shrinkr.Controllers
         [Route("Generate")]
         public IActionResult Generate([FromBody]string longUrl)
         {
-            var shortUrlToken = Guid.NewGuid().ToString().Substring(0, 8);
-            var shortUrl = $"{Request.Headers["Origin"]}/{shortUrlToken}";
-            this.database.Add(shortUrlToken, shortUrl, longUrl);
-            return new OkObjectResult(shortUrl);
+            if (Uri.IsWellFormedUriString(longUrl, UriKind.Absolute))
+            {
+                var shortUrlToken = Guid.NewGuid().ToString().Substring(0, 8);
+                var shortUrl = $"{Request.Headers["Origin"]}/{shortUrlToken}";
+                this.database.Add(shortUrlToken, shortUrl, longUrl);
+                return new OkObjectResult(shortUrl); 
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
@@ -33,7 +40,14 @@ namespace Shrinkr.Controllers
         public IActionResult ShrinkRedirect([FromRoute]string token)
         {
             var urlMapping = this.database.UrlMappings.FirstOrDefault(x => x.Token == token);
-            return new RedirectResult(urlMapping.LongUrl);
+            if (urlMapping != null)
+            {
+                return new RedirectResult(urlMapping.LongUrl); 
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
