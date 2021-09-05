@@ -12,6 +12,7 @@ Provide a url within "" and you will be given a shortened url.
 
 ### /{token}
 This is the API endpoint responsible for handling all shortened urls.
+e.g. With Shrinkr running, in a browser navigate to https://localhost:44324/49543a27 and you will be redirected to https://dotnet.microsoft.com/learn/dotnet/what-is-dotnet
 
 ### /GetDatabase
 Gets all mappings from the database.
