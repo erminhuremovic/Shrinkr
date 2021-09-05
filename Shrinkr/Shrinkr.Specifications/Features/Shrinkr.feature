@@ -5,13 +5,13 @@ Background:
 	Given the Shrinkr service is running
 
 Scenario: Generate a shorter Url
-	When I provide a Url
-	Then a shortened Url returned
-	And a shortened Url is added to the database
+	When I provide the Url; "https://docs.microsoft.com/en-us/dotnet/fundamentals/"
+	Then I will receive a shortened Url
+	And the Url; "https://docs.microsoft.com/en-us/dotnet/fundamentals/" is added to the database
 
 Scenario: Redirect a shortened Url
-	Given the follow Urls are present in the database
-		| Long Url                                              | Short Url               |
-		| https://docs.microsoft.com/en-us/dotnet/fundamentals/ | https://shrink.r/DoReMi |
-	When I navigate to "https://shrink.r/DoReMi"
+	Given the following records are present in the database
+		| Token    | Long Url                                              |
+		| 14436D9F | https://docs.microsoft.com/en-us/dotnet/fundamentals/ |
+	When I navigate to "https://localhost/14436D9F"
 	Then I will be redirected to "https://docs.microsoft.com/en-us/dotnet/fundamentals/"

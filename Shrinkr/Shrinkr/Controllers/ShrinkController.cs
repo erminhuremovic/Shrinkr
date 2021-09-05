@@ -1,27 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Shrinkr.Dal;
 
 namespace Shrinkr.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class ShrinkController : ControllerBase
     {
-        private readonly ILogger<ShrinkController> _logger;
+        private readonly ILogger<ShrinkController> logger;
+        private readonly IDatabase database;
 
-        public ShrinkController(ILogger<ShrinkController> logger)
+        public ShrinkController(ILogger<ShrinkController> logger, IDatabase database)
         {
-            _logger = logger;
+            this.logger = logger;
+            this.database = database;
+        }
+
+        [HttpPost]
+        [Route("Generate")]
+        public IActionResult Generate([FromBody]string longUrl)
+        {
+            var shortUrlToken = Guid.NewGuid().ToString().Substring(0, 8);
+            this.database.Add(shortUrlToken, longUrl);
+            return new OkObjectResult($"{Request.Headers["Origin"]}{shortUrlToken}");
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("/{token}")]
+        public IActionResult ShrinkRedirect([FromRoute]string token)
         {
-            return new List<string>();
+            var urlMapping = this.database.UrlMappings.FirstOrDefault(x => x.Token == token);
+            return new RedirectResult(urlMapping.LongUrl);
         }
     }
 }
