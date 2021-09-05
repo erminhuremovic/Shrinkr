@@ -22,7 +22,7 @@ namespace Shrinkr.Specifications.Steps
         /// <summary>
         /// The base address of the test server is http://localhost
         /// </summary>
-        private const string baseAddress = "http://localhost/";
+        private const string baseAddress = "http://localhost";
         private readonly WebApplicationFactory<Startup> webApplicationFactory;
         private readonly Mock<IDatabase> mockDatabase = new Mock<IDatabase>();
         private HttpClient client;
@@ -66,7 +66,8 @@ namespace Shrinkr.Specifications.Steps
             var body = await this.httpResponse.Content.ReadAsStringAsync();
 
             // The length is made up of http://localhost/12345678
-            body.Length.ShouldBe(baseAddress.Length + 8, $"Body is actually {body}.");
+            // 9 additional characters come from /12345678
+            body.Length.ShouldBe(baseAddress.Length + 9, $"Body is actually {body}.");
         }
 
         [Then(@"the Url; ""(.*)"" is added to the database")]
