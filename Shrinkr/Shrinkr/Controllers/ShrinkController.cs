@@ -24,7 +24,7 @@ namespace Shrinkr.Controllers
         {
             var shortUrlToken = Guid.NewGuid().ToString().Substring(0, 8);
             this.database.Add(shortUrlToken, longUrl);
-            return new OkObjectResult($"{Request.Headers["Origin"]}{shortUrlToken}");
+            return new OkObjectResult($"{Request.Headers["Origin"]}/{shortUrlToken}");
         }
 
         [HttpGet]
@@ -34,5 +34,13 @@ namespace Shrinkr.Controllers
             var urlMapping = this.database.UrlMappings.FirstOrDefault(x => x.Token == token);
             return new RedirectResult(urlMapping.LongUrl);
         }
+
+        [HttpGet]
+        [Route("/GetDatabase")]
+        public IActionResult GetDatabase()
+        {
+            return new OkObjectResult(this.database.UrlMappings);
+        }
+
     }
 }
