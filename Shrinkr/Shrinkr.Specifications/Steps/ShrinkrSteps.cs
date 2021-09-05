@@ -73,7 +73,7 @@ namespace Shrinkr.Specifications.Steps
         [Then(@"the Url; ""(.*)"" is added to the database")]
         public void ThenTheUrlIsAddedToTheDatabase(string longUrl)
         {
-            this.mockDatabase.Verify(x => x.Add(It.Is<string>(x => x.Length == 8), longUrl), Times.Once);
+            this.mockDatabase.Verify(x => x.Add(It.Is<string>(x => x.Length == 8), It.IsAny<string>(), longUrl), Times.Once);
         }
 
         [Given(@"the following records are present in the database")]

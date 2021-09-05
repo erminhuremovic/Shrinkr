@@ -23,8 +23,9 @@ namespace Shrinkr.Controllers
         public IActionResult Generate([FromBody]string longUrl)
         {
             var shortUrlToken = Guid.NewGuid().ToString().Substring(0, 8);
-            this.database.Add(shortUrlToken, longUrl);
-            return new OkObjectResult($"{Request.Headers["Origin"]}/{shortUrlToken}");
+            var shortUrl = $"{Request.Headers["Origin"]}/{shortUrlToken}";
+            this.database.Add(shortUrlToken, shortUrl, longUrl);
+            return new OkObjectResult(shortUrl);
         }
 
         [HttpGet]

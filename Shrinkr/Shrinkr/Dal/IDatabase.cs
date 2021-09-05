@@ -7,6 +7,6 @@ namespace Shrinkr.Dal
     {
         List<UrlMapping> UrlMappings { get; }
 
-        void Add(string token, string longUrl);
+        void Add(string token, string shortUrl, string longUrl);
     }
 }

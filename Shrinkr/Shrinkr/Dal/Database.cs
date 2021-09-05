@@ -13,7 +13,7 @@ namespace Shrinkr.Dal
 
         public List<UrlMapping> UrlMappings { get => this.GetUrlMappingsFromDatabase(); } 
 
-        public void Add(string token, string longUrl)
+        public void Add(string token, string shortUrl, string longUrl)
         {
             using (var database = new LiteDatabase(DatabaseName))
             {
@@ -22,6 +22,7 @@ namespace Shrinkr.Dal
                 var newUrlMapping = new UrlMapping
                 {
                     Token = token,
+                    ShortUrl = shortUrl,
                     LongUrl = longUrl
                 };
 
